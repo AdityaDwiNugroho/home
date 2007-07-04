@@ -46,6 +46,247 @@ body {
     position: relative;
 }
 
+/* Splash Screen Styles */
+.splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, 
+        rgba(13, 17, 23, 0.95) 0%, 
+        rgba(22, 27, 34, 0.98) 50%,
+        rgba(13, 17, 23, 0.95) 100%);
+    backdrop-filter: blur(20px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.splash-screen.fade-out {
+    opacity: 0;
+    transform: scale(1.1);
+    pointer-events: none;
+}
+
+.splash-content {
+    text-align: center;
+    position: relative;
+    z-index: 2;
+    animation: splash-fade-in 1s ease 0.3s forwards;
+    opacity: 0;
+}
+
+@keyframes splash-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.splash-logo {
+    margin-bottom: 2rem;
+    animation: logo-pulse 2s ease-in-out infinite;
+}
+
+.logo-circle {
+    width: 100px;
+    height: 100px;
+    border: 3px solid var(--glass-border);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    background: var(--glass);
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+}
+
+.logo-circle::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(from 0deg, transparent, var(--accent-1), transparent);
+    animation: logo-rotate 3s linear infinite;
+    opacity: 0.3;
+}
+
+.logo-text {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent-1);
+    position: relative;
+    z-index: 1;
+}
+
+.logo-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    position: relative;
+    z-index: 1;
+}
+
+@keyframes logo-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes logo-rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.splash-title {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, var(--accent-1), var(--text-secondary));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 200% 200%;
+    animation: gradient-shift 3s ease infinite;
+}
+
+.splash-subtitle {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    margin-bottom: 3rem;
+    opacity: 0.8;
+}
+
+.enter-button {
+    position: relative;
+    padding: 1.5rem 3rem;
+    background: transparent;
+    border: 2px solid var(--accent-1);
+    border-radius: 50px;
+    color: var(--accent-1);
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    min-width: 200px;
+    font-family: inherit;
+}
+
+.enter-button:hover {
+    background: var(--accent-1);
+    color: var(--accent-3);
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(255, 255, 255, 0.2);
+}
+
+.enter-button:active {
+    transform: translateY(-1px);
+}
+
+.enter-text {
+    position: relative;
+    z-index: 2;
+}
+
+.enter-ripple {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: var(--accent-1);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 0.5s ease;
+    opacity: 0;
+}
+
+.enter-button:active .enter-ripple {
+    width: 300px;
+    height: 300px;
+    opacity: 0.3;
+}
+
+.splash-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    background-image: 
+        radial-gradient(2px 2px at 25px 25px, rgba(255, 255, 255, 0.2), transparent),
+        radial-gradient(2px 2px at 75px 75px, rgba(255, 255, 255, 0.1), transparent),
+        radial-gradient(1px 1px at 125px 25px, rgba(255, 255, 255, 0.15), transparent),
+        radial-gradient(1px 1px at 25px 125px, rgba(255, 255, 255, 0.1), transparent);
+    background-repeat: repeat;
+    background-size: 150px 150px;
+    animation: splash-particles-float 15s infinite linear;
+}
+
+@keyframes splash-particles-float {
+    0% { transform: translateY(0px) translateX(0px) rotate(0deg); }
+    33% { transform: translateY(-20px) translateX(10px) rotate(120deg); }
+    66% { transform: translateY(-40px) translateX(-10px) rotate(240deg); }
+    100% { transform: translateY(-60px) translateX(0px) rotate(360deg); }
+}
+
+/* Mobile responsive styles for splash screen */
+@media (max-width: 768px) {
+    .splash-title {
+        font-size: 2.5rem;
+    }
+    
+    .splash-subtitle {
+        font-size: 1rem;
+        padding: 0 1rem;
+    }
+    
+    .enter-button {
+        padding: 1.2rem 2.5rem;
+        font-size: 1.1rem;
+        min-width: 180px;
+    }
+    
+    .logo-circle {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .logo-text {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .splash-title {
+        font-size: 2rem;
+    }
+    
+    .splash-subtitle {
+        font-size: 0.9rem;
+        margin-bottom: 2rem;
+    }
+    
+    .enter-button {
+        padding: 1rem 2rem;
+        font-size: 1rem;
+        min-width: 160px;
+    }
+}
+
 
 .video-background {
     position: fixed;
@@ -186,12 +427,20 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
     position: relative;
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+}
+
+.container.loaded {
+    opacity: 1;
 }
 
 
 .hero-section {
-    padding: 6rem 2rem 4rem;
+    padding: 2rem 2rem 2rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -199,7 +448,6 @@ body {
     text-align: center;
     position: relative;
     overflow: hidden;
-    min-height: 50vh;
 }
 
 .personal-info {
@@ -218,7 +466,7 @@ body {
 .main-content {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 2rem;
+    padding: 0 2rem;
 }
 
 .content-section {

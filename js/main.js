@@ -1,5 +1,72 @@
 'use strict';
 
+
+class SplashScreenHandler {
+    constructor() {
+        this.splashScreen = null;
+        this.enterButton = null;
+        this.mainContent = null;
+        this.hasUserInteracted = false;
+        
+        this.init();
+    }
+    
+    init() {
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => this.setupSplashScreen());
+        } else {
+            this.setupSplashScreen();
+        }
+    }
+    
+    setupSplashScreen() {
+        this.splashScreen = document.getElementById('splashScreen');
+        this.enterButton = document.getElementById('enterButton');
+        this.mainContent = document.getElementById('mainContent');
+        
+        if (this.enterButton) {
+            this.enterButton.addEventListener('click', () => this.handleEnterClick());
+        }
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && this.splashScreen && !this.hasUserInteracted) {
+                this.handleEnterClick();
+            }
+        });
+    }
+    
+    handleEnterClick() {
+        if (this.hasUserInteracted) return;
+        
+        this.hasUserInteracted = true;
+        
+        if (this.splashScreen) {
+            this.splashScreen.classList.add('fade-out');
+            setTimeout(() => {
+                this.splashScreen.style.display = 'none';
+            }, 800);
+        }
+        
+        if (this.mainContent) {
+            this.mainContent.style.display = 'flex';
+            setTimeout(() => {
+                this.mainContent.classList.add('loaded');
+            }, 400);
+        }
+        
+        setTimeout(() => {
+            window.buttonController = new AbstractButtonController();
+            
+            // Start music after button controller is ready
+            setTimeout(() => {
+                if (window.musicController && window.musicController.startMusicAfterInteraction) {
+                    window.musicController.startMusicAfterInteraction();
+                }
+            }, 500);
+        }, 500);
+    }
+}
+
 class AbstractButtonController {
     constructor() {
         this.buttons = [];
@@ -61,7 +128,7 @@ class AbstractButtonController {
         // Reduce particle effects on mobile (but don't disable completely)
         document.querySelectorAll('.floating-particles').forEach(el => {
             el.style.opacity = '0.3';
-            el.style.animationDuration = '8s'; // Slower animation
+            el.style.animationDuration = '8s'; 
         });
 
         // Reduce animation complexity but keep them
@@ -83,7 +150,7 @@ class AbstractButtonController {
             const currentSrc = videoBackground.src;
             const mobileOptimizedSrc = currentSrc.replace('&mute=1', '&mute=1&vq=small');
             videoBackground.src = mobileOptimizedSrc;
-            videoBackground.style.opacity = '0.7'; // Slightly transparent for performance
+            videoBackground.style.opacity = '0.7'; 
         }
 
         // Keep music but load it delayed on mobile
@@ -92,7 +159,7 @@ class AbstractButtonController {
             if (musicContainer && !musicContainer.querySelector('iframe')) {
                 this.loadMobileOptimizedMusic();
             }
-        }, 2000); // 2 second delay for mobile
+        }, 2000);
     }
 
     loadMobileOptimizedMusic() {
@@ -115,7 +182,7 @@ class AbstractButtonController {
     }
 
     loadVideoAndMusic() {
-        // Load video background immediately
+        // Load video background immediately (muted video is allowed)
         const videoIframe = document.getElementById('backgroundVideo');
         if (videoIframe) {
             const videoSrc = "https://www.youtube-nocookie.com/embed/ScMzIvxBSi4?autoplay=1&mute=1&loop=1&playlist=ScMzIvxBSi4&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&disablekb=1&fs=0&cc_load_policy=0&playsinline=1&enablejsapi=0";
@@ -131,30 +198,34 @@ class AbstractButtonController {
             } else {
                 // Full quality for desktop
                 videoIframe.src = videoSrc;
-                videoIframe.style.opacity = '0.3'; // Match CSS opacity
+                videoIframe.style.opacity = '0.3'; 
             }
             
-            console.log('🎬 Background video loaded');
         }
 
-        // Load background music - TRY UNMUTED AUTOPLAY FIRST
+        
+        // Store this instance for later use
+        window.musicController = this;
+    }
+
+    startMusicAfterInteraction() {
+        // This method is called from the splash screen after user interaction
         const musicIframe = document.getElementById('backgroundMusic');
         if (musicIframe) {
-            // Try UNMUTED autoplay first (should work with updated .htaccess)
             const unmutedMusicSrc = "https://www.youtube-nocookie.com/embed/jfKfPfyJRdk?autoplay=1&mute=0&loop=1&playlist=jfKfPfyJRdk&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&disablekb=1&fs=0&cc_load_policy=0&playsinline=1&enablejsapi=0";
             
-            // Load unmuted music immediately
+            // Load unmuted music after user interaction
             musicIframe.src = this.isMobile ? unmutedMusicSrc + "&vq=small" : unmutedMusicSrc;
-            console.log('🎵 Background music loaded UNMUTED and should autoplay immediately');
+            this.isMusicPlaying = true;
             
-            // Fallback to muted if unmuted fails
-            setTimeout(() => {
-                if (musicIframe.src && !this.isMusicPlaying) {
-                    const mutedSrc = musicIframe.src.replace('mute=0', 'mute=1');
-                    musicIframe.src = mutedSrc;
-                    console.log('🎵 Fallback to muted music');
-                }
-            }, 2000);
+            // Update UI
+            if (this.musicToggle) {
+                this.musicToggle.classList.add('playing');
+                this.updateMusicIcon(true);
+                this.musicToggle.querySelector('.music-text').textContent = 'Disable Music';
+                this.musicToggle.setAttribute('aria-label', 'Disable music');
+            }
+            
         }
     }
 
@@ -165,7 +236,6 @@ class AbstractButtonController {
             if (musicIframe && !musicIframe.src) {
                 const musicSrc = "https://www.youtube-nocookie.com/embed/jfKfPfyJRdk?autoplay=1&loop=1&playlist=jfKfPfyJRdk&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&disablekb=1&fs=0&cc_load_policy=0&playsinline=1&enablejsapi=0";
                 musicIframe.src = this.isMobile ? musicSrc + "&vq=small" : musicSrc;
-                console.log('🎵 Music started after user interaction');
             }
             
             // Remove listeners after first interaction
@@ -179,7 +249,6 @@ class AbstractButtonController {
         document.addEventListener('keydown', startMusicOnInteraction, { once: true });
         document.addEventListener('touchstart', startMusicOnInteraction, { once: true });
         
-        console.log('🎵 Music will start on first user interaction (click, key, or touch)');
     }
 
     forceStartMusic() {
@@ -192,14 +261,11 @@ class AbstractButtonController {
                 
                 musicIframe.src = unmutedMusicSrc;
                 musicIframe.style.display = 'none';
-                console.log('🎵 DIRECT AUTOPLAY: Unmuted music should start immediately');
             }
         };
 
-        // Try starting unmuted music immediately
         startMusic();
         
-        console.log('🎵 Direct unmuted autoplay attempted with .htaccess permissions');
     }
 
     setupInteractions() {
@@ -210,14 +276,9 @@ class AbstractButtonController {
         this.initializeAnimations();
         this.setupMusicControls();
         
-        // Load video and music after everything else is set up
         this.loadVideoAndMusic();
-        this.forceStartMusic(); // Add aggressive music start
+        this.forceStartMusic(); 
         
-        // Debug logging
-        console.log('🚀 AbstractButtonController initialized');
-        console.log('📱 Mobile detected:', this.isMobile);
-        console.log('🔗 Connection type:', this.connectionType);
     }
 
     cacheElements() {
@@ -685,10 +746,9 @@ class AbstractButtonController {
         // Set initial state - music should be playing unmuted
         this.isMusicPlaying = true;
         this.musicToggle.classList.add('playing');
-        this.updateMusicIcon(true); // Show playing icon
+        this.updateMusicIcon(true); 
         this.musicToggle.querySelector('.music-text').textContent = 'Disable Music';
         
-        console.log('🎵 Music controls initialized - music should autoplay unmuted');
     }
     
     updateMusicIcon(isPlaying) {
@@ -756,7 +816,8 @@ class AbstractButtonController {
     }
 }
 
-const app = new AbstractButtonController();
+// Initialize splash screen :>
+const splashHandler = new SplashScreenHandler();
 
 document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
@@ -767,5 +828,5 @@ document.addEventListener('visibilitychange', () => {
 });
 
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = AbstractButtonController;
+    module.exports = { AbstractButtonController, SplashScreenHandler };
 }

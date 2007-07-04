@@ -44,8 +44,25 @@
     <title>Aditya Dwi Nugroho</title>
 </head>
 <body>
+    <div class="splash-screen" id="splashScreen">
+        <div class="splash-content">
+            <div class="splash-logo">
+                <div class="logo-circle">
+                    <img src="img/cat.jpeg" alt="Profile" class="logo-image">
+                </div>
+            </div>
+            <h1 class="splash-title">Welcome</h1>
+            <p class="splash-subtitle">Click to enter and enable audio experience</p>
+            <button class="enter-button" id="enterButton">
+                <span class="enter-text">Enter</span>
+                <div class="enter-ripple"></div>
+            </button>
+            <div class="splash-particles"></div>
+        </div>
+    </div>
+
     <!-- Main Container -->
-    <main class="container" role="main">
+    <main class="container" role="main" style="display: none;" id="mainContent">
         <!-- Video Background - Desktop only for performance -->
         <div class="video-background" id="videoBackground">
             <!-- YouTube video embed - optimized for performance -->
@@ -103,7 +120,7 @@
         <!-- Main Content -->
         <section class="main-content">
             <!-- Links Section -->
-            <div class="content-section" style="margin-top: 6rem;">
+            <div class="content-section" style="margin-top: 2rem;">
                 <div class="links-grid">
                     <a href="https://github.com/AdityaDwiNugroho" class="social-link">GitHub</a>
                     <a href="https://www.linkedin.com/in/aditya-dwi-nugroho-75057827a" class="social-link">LinkedIn</a>
