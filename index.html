@@ -7,17 +7,38 @@
     <meta name="author" content="Aditya Dwi Nugroho">
     
     <!-- Performance Optimizations -->
-    <link rel="preconnect" href="https://www.youtube-nocookie.com">
+    <link rel="preconnect" href="https://www.youtube-nocookie.com" crossorigin>
     <link rel="dns-prefetch" href="https://www.youtube-nocookie.com">
     <meta name="theme-color" content="#0f172a">
+    <meta name="color-scheme" content="dark">
     
     <!-- Security Headers -->
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+    <meta http-equiv="Cross-Origin-Embedder-Policy" content="unsafe-none">
     
     <!-- Critical CSS should be inlined, external CSS loaded async -->
     <link rel="preload" href="./css/styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="./css/styles.css"></noscript>
+    <noscript>    <link rel="dns-prefetch" href="//www.youtube-nocookie.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Critical CSS inline for mobile -->
+    <style>
+        body { margin: 0; font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif; }
+        .hero-title { font-size: clamp(2rem, 6vw, 4rem); text-align: center; margin: 2rem 0; }
+        .social-link { display: inline-block; padding: 1rem 2rem; margin: 0.5rem; 
+                      background: rgba(255,255,255,0.1); border-radius: 12px; 
+                      text-decoration: none; color: white; }
+        /* Mobile video optimization */
+        @media (max-width: 768px) {
+            .video-background iframe { opacity: 0.7; filter: blur(0.5px); }
+            .floating-particles { opacity: 0.3; animation-duration: 8s; }
+        }
+    </style>
+    
+    <link rel="stylesheet" href="css/styles.css" media="print" onload="this.media='all'; this.onload=null;">
+    <noscript><link rel="stylesheet" href="css/styles.css"></noscript></noscript>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
     
     <title>Aditya Dwi Nugroho</title>
@@ -25,15 +46,19 @@
 <body>
     <!-- Main Container -->
     <main class="container" role="main">
-        <!-- Video Background -->
-        <div class="video-background">
+        <!-- Video Background - Desktop only for performance -->
+        <div class="video-background" id="videoBackground">
             <!-- YouTube video embed - optimized for performance -->
             <iframe 
-                src="https://www.youtube-nocookie.com/embed/ScMzIvxBSi4?autoplay=1&mute=1&loop=1&playlist=ScMzIvxBSi4&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&disablekb=1&fs=0&cc_load_policy=0&start=1&enablejsapi=0"
+                id="backgroundVideo"
+                src=""
                 frameborder="0" 
                 loading="lazy"
                 allow="autoplay; encrypted-media" 
-                allowfullscreen>
+                allowfullscreen
+                referrerpolicy="strict-origin-when-cross-origin"
+                sandbox="allow-scripts allow-same-origin allow-presentation"
+                title="Background video">
             </iframe>
             <div class="video-overlay"></div>
         </div>
@@ -45,8 +70,11 @@
                 id="backgroundMusic"
                 style="display: none;"
                 src=""
-                loading="lazy"
-                allow="autoplay; encrypted-media">
+                loading="eager"
+                allow="autoplay; encrypted-media; microphone"
+                referrerpolicy="strict-origin-when-cross-origin"
+                sandbox="allow-scripts allow-same-origin allow-presentation"
+                title="Background music">
             </iframe>
         </div>
         
@@ -88,11 +116,29 @@
 
     <!-- JavaScript - optimized loading -->
     <script>
+        // Critical mobile detection and optimization
+        const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
+        const isSlowConnection = 'connection' in navigator && (navigator.connection.effectiveType === 'slow-2g' || navigator.connection.effectiveType === '2g');
+        
         // Inline critical JS for immediate execution
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js');
             });
+        }
+        
+        // Only preload on fast connections and desktop
+        if (!isMobile && !isSlowConnection && 'connection' in navigator && navigator.connection.effectiveType !== 'slow-2g') {
+            const link = document.createElement('link');
+            link.rel = 'preload';
+            link.href = './js/main.js';
+            link.as = 'script';
+            document.head.appendChild(link);
+        }
+        
+        // Add mobile class for CSS optimizations
+        if (isMobile) {
+            document.documentElement.classList.add('mobile');
         }
     </script>
     <script src="./js/main.js" defer></script>
