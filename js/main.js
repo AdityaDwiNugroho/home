@@ -554,7 +554,7 @@ class AbstractButtonController {
         this.backgroundMusic.style.left = '-9999px';
         this.backgroundMusic.style.width = '1px';
         this.backgroundMusic.style.height = '1px';
-        this.backgroundMusic.src = 'https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=1&loop=1&playlist=jfKfPfyJRdk&controls=0&mute=0&rel=0&modestbranding=1';
+        this.backgroundMusic.src = 'https://www.youtube-nocookie.com/embed/jfKfPfyJRdk?autoplay=1&loop=1&playlist=jfKfPfyJRdk&controls=0&mute=0&rel=0&modestbranding=1&cc_load_policy=0&start=1';
         
         this.isMusicPlaying = true;
         this.musicToggle.classList.add('playing');
