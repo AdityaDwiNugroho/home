@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Aditya Dwi Nugroho - Full-stack Developer">
+    <meta name="author" content="Aditya Dwi Nugroho">
+    
+    <!-- Security Headers -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+    
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+    
+    <title>Aditya Dwi Nugroho</title>
+</head>
+<body>
+    <!-- Main Container -->
+    <main class="container" role="main">
+        <!-- Video Background -->
+        <div class="video-background">
+            <!-- YouTube video embed - calming nature/journey video -->
+            <iframe 
+                src="https://www.youtube.com/embed/ScMzIvxBSi4?autoplay=1&mute=1&loop=1&playlist=ScMzIvxBSi4&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&disablekb=1&fs=0"
+                frameborder="0" 
+                allow="autoplay; encrypted-media" 
+                allowfullscreen>
+            </iframe>
+            <div class="video-overlay"></div>
+        </div>
+        
+        <!-- Background Music -->
+        <div class="audio-background">
+            <!-- YouTube ambient music - starts automatically -->
+            <iframe 
+                id="backgroundMusic"
+                style="display: block; position: absolute; top: -9999px; left: -9999px; width: 1px; height: 1px;"
+                src="https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=1&loop=1&playlist=jfKfPfyJRdk&controls=0&mute=0&rel=0&modestbranding=1"
+                allow="autoplay; encrypted-media">
+            </iframe>
+        </div>
+        
+        <!-- Music control button (outside audio-background to avoid pointer-events: none) -->
+        <button id="musicToggle" class="music-control" aria-label="Disable music">
+            <span class="music-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 3L12 21M8 7L8 17M16 7L16 17M4 10L4 14M20 10L20 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <line x1="3" y1="12" x2="21" y2="12" stroke="currentColor" stroke-width="2" opacity="0.5"/>
+                    <line x1="1" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2" opacity="0.3"/>
+                </svg>
+            </span>
+            <span class="music-text">Disable Music</span>
+        </button>
+        
+        <!-- Header Section -->
+        <header class="hero-section">
+            <div class="floating-particles"></div>
+            <h1 class="hero-title">
+                <span class="title-line">Aditya Dwi Nugroho</span>
+                <span class="title-subtitle">Full-stack Developer</span>
+            </h1>
+            <p class="hero-description">Building modern applications with clean code</p>
+        </header>
+
+        <!-- Main Content -->
+        <section class="main-content">
+            <!-- Links Section -->
+            <div class="content-section" style="margin-top: 6rem;">
+                <div class="links-grid">
+                    <a href="https://github.com/AdityaDwiNugroho" class="social-link">GitHub</a>
+                    <a href="https://www.linkedin.com/in/aditya-dwi-nugroho-75057827a" class="social-link">LinkedIn</a>
+                    <a href="https://www.instagram.com/allen.adityadn/" class="social-link">Instagram</a>
+                    <a href="mailto:aditadit120420@gmail.com" class="social-link">Email</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- JavaScript -->
+    <script src="./js/main.js" defer></script>
+</body>
+</html>
