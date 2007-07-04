@@ -6,11 +6,18 @@
     <meta name="description" content="Aditya Dwi Nugroho - Full-stack Developer">
     <meta name="author" content="Aditya Dwi Nugroho">
     
+    <!-- Performance Optimizations -->
+    <link rel="preconnect" href="https://www.youtube-nocookie.com">
+    <link rel="dns-prefetch" href="https://www.youtube-nocookie.com">
+    <meta name="theme-color" content="#0f172a">
+    
     <!-- Security Headers -->
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
     
-    <link rel="stylesheet" href="./css/styles.css">
+    <!-- Critical CSS should be inlined, external CSS loaded async -->
+    <link rel="preload" href="./css/styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="./css/styles.css"></noscript>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
     
     <title>Aditya Dwi Nugroho</title>
@@ -20,10 +27,11 @@
     <main class="container" role="main">
         <!-- Video Background -->
         <div class="video-background">
-            <!-- YouTube video embed - calming nature/journey video -->
+            <!-- YouTube video embed - optimized for performance -->
             <iframe 
-                src="https://www.youtube-nocookie.com/embed/ScMzIvxBSi4?autoplay=1&mute=1&loop=1&playlist=ScMzIvxBSi4&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&disablekb=1&fs=0&cc_load_policy=0&start=1"
+                src="https://www.youtube-nocookie.com/embed/ScMzIvxBSi4?autoplay=1&mute=1&loop=1&playlist=ScMzIvxBSi4&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&disablekb=1&fs=0&cc_load_policy=0&start=1&enablejsapi=0"
                 frameborder="0" 
+                loading="lazy"
                 allow="autoplay; encrypted-media" 
                 allowfullscreen>
             </iframe>
@@ -32,11 +40,12 @@
         
         <!-- Background Music -->
         <div class="audio-background">
-            <!-- YouTube ambient music - starts automatically -->
+            <!-- YouTube ambient music - optimized loading -->
             <iframe 
                 id="backgroundMusic"
-                style="display: block; position: absolute; top: -9999px; left: -9999px; width: 1px; height: 1px;"
-                src="https://www.youtube-nocookie.com/embed/jfKfPfyJRdk?autoplay=1&loop=1&playlist=jfKfPfyJRdk&controls=0&mute=0&rel=0&modestbranding=1&cc_load_policy=0&start=1"
+                style="display: none;"
+                src=""
+                loading="lazy"
                 allow="autoplay; encrypted-media">
             </iframe>
         </div>
@@ -77,7 +86,15 @@
         </section>
     </main>
 
-    <!-- JavaScript -->
+    <!-- JavaScript - optimized loading -->
+    <script>
+        // Inline critical JS for immediate execution
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js');
+            });
+        }
+    </script>
     <script src="./js/main.js" defer></script>
 </body>
 </html>

@@ -554,7 +554,7 @@ class AbstractButtonController {
         this.backgroundMusic.style.left = '-9999px';
         this.backgroundMusic.style.width = '1px';
         this.backgroundMusic.style.height = '1px';
-        this.backgroundMusic.src = 'https://www.youtube-nocookie.com/embed/jfKfPfyJRdk?autoplay=1&loop=1&playlist=jfKfPfyJRdk&controls=0&mute=0&rel=0&modestbranding=1&cc_load_policy=0&start=1';
+        this.backgroundMusic.src = 'https://www.youtube-nocookie.com/embed/jfKfPfyJRdk?autoplay=1&loop=1&playlist=jfKfPfyJRdk&controls=0&mute=0&rel=0&modestbranding=1&cc_load_policy=0&start=1&enablejsapi=0';
         
         this.isMusicPlaying = true;
         this.musicToggle.classList.add('playing');
@@ -575,16 +575,6 @@ class AbstractButtonController {
         this.musicToggle.querySelector('.music-text').textContent = 'Enable Music';
         this.musicToggle.setAttribute('aria-label', 'Enable music');
     }
-}
-
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js')
-            .then(registration => {
-            })
-            .catch(registrationError => {
-            });
-    });
 }
 
 const app = new AbstractButtonController();
